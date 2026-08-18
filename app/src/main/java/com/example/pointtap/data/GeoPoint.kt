@@ -6,5 +6,6 @@ import kotlinx.serialization.Serializable
 data class GeoPoint(
     val latitude: Double,
     val longitude: Double,
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+    val label: String? = null
 )

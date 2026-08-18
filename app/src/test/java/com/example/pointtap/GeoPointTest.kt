@@ -8,14 +8,15 @@ import org.junit.Test
 
 class GeoPointTest {
     @Test
-    fun testSerialization() {
+    fun testSerializationWithLabel() {
         val points = listOf(
-            GeoPoint(10.0, 20.0, 123456789L),
-            GeoPoint(11.0, 21.0, 123456790L)
+            GeoPoint(10.0, 20.0, 123456789L, "Calle A"),
+            GeoPoint(11.0, 21.0, 123456790L, "Calle A")
         )
         val json = Json.encodeToString(points)
         assertTrue(json.contains("\"latitude\":10.0"))
         assertTrue(json.contains("\"longitude\":20.0"))
         assertTrue(json.contains("\"timestamp\":123456789"))
+        assertTrue(json.contains("\"label\":\"Calle A\""))
     }
 }
