@@ -1,27 +1,26 @@
-# Walkthrough: Corrección del Acceso Directo a Carpeta
+# Walkthrough: Rediseño de Controles de Captura
 
-Se ha refactorizado la función de acceso directo para asegurar que el usuario pueda llegar a sus archivos JSON de forma fiable en cualquier dispositivo con Android 10+.
+Se ha optimizado la ubicación de los controles para mejorar la ergonomía y facilitar el acceso a los dos modos de captura (Manual y Automático).
 
 ## Cambios Realizados
 
-### Nueva Lógica de Navegación
-- **Intent Inteligente:** Ahora la app utiliza el proveedor de documentos del sistema (`ExternalStorageProvider`) para intentar abrir directamente la subcarpeta `Download/PointTap`. Este es el método más preciso en Android moderno.
-- **Sistema de Respaldo (Multi-fallback):**
-    1. **Nivel 1:** Intenta abrir la carpeta específica `PointTap`.
-    2. **Nivel 2 (Respaldo):** Si el sistema no permite abrir la subcarpeta directamente, lanza el gestor de **Descargas** estándar de Android.
-    3. **Nivel 3 (Crítico):** Si lo anterior falla, abre el selector de archivos general para que el usuario navegue manualmente.
+### Nueva Disposición Vertical (FABs)
+- **Consolidación de Controles:** El botón de modo automático se ha movido de la barra superior a la esquina inferior derecha, justo encima del botón de captura manual.
+- **Jerarquía Visual:**
+    - **Botón Superior (Reloj):** Activa el modo de captura automática cada 5 segundos. Tiene un color secundario para diferenciarse.
+    - **Botón Inferior (+):** Realiza la captura manual de un único punto. Es el botón principal en color sólido.
+- **Espaciado Ergonómico:** Ambos botones están alineados verticalmente con una separación adecuada para evitar toques accidentales.
 
-## Cómo verificar la mejora
+## Cómo usar el nuevo diseño
 
-1.  **Reinicia la app.**
-2.  **Captura y Guarda:** Marca un punto y presiona el icono de **Guardar**.
-3.  **Acceso Directo:** Presiona el icono de la **Carpeta**.
-    - En la mayoría de los dispositivos modernos, se abrirá el gestor de archivos directamente en la carpeta **PointTap**.
-    - Si tu gestor de archivos predeterminado es muy restrictivo, verás la lista de **Descargas** donde podrás entrar a "PointTap".
+1. **Modo Manual:** Pulsa el botón circular grande con el signo **"+"** en la esquina inferior.
+2. **Modo Automático:** Pulsa el botón circular que está justo encima con el icono del **reloj (Timer)**.
+    - Al hacerlo, ambos botones se ocultarán y aparecerán los controles de **Pausa** y **Stop** ya conocidos.
+3. **Regreso al Inicio:** Al pulsar **Stop (Rojo)**, volverás a ver la columna de dos botones (Auto y Manual).
 
-## Verificación Final
+## Verificación Técnica
+- **Diseño:** Se utilizó un componente `Column` dentro del `floatingActionButton` del Scaffold para agrupar los botones.
 - **Build:** Compilación exitosa.
-- **Seguridad:** Se respetan todos los permisos de Scoped Storage.
 
 > [!TIP]
-> Si al pulsar el icono de carpeta se abre una lista vacía, asegúrate de haber guardado al menos un archivo primero presionando el icono del disco.
+> Esta nueva ubicación permite controlar toda la operación de captura con un solo pulgar, sin tener que alcanzar la parte superior de la pantalla.

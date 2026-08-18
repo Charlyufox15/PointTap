@@ -1,8 +1,10 @@
-# Tareas: Corrección de Acceso a Carpeta
+# Tareas: Rediseño de Botones de Captura
 
-- [x] Corregir lógica de guardado en ViewModel (Completado anteriormente)
-- [x] Refactorizar acceso a carpeta
-    - [x] Implementar Intent multi-fallback en `MainViewModel.kt`
+- [x] Actualizar el ViewModel (Completado)
+- [x] Rediseñar Interfaz de Usuario
+    - [x] Mover botón de modo automático del TopBar al área flotante
+    - [x] Organizar botones en columna (Auto encima de Manual)
+    - [x] Mantener icono de reloj para el modo automático
 - [x] Verificación
     - [x] Ejecutar build
     - [x] Verificación manual
