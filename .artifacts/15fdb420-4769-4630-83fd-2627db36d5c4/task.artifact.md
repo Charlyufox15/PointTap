@@ -8,3 +8,5 @@
 - [x] Verificación
     - [x] Ejecutar build
     - [x] Verificación manual de la estructura JSON
+- [x] Actualizar versión a 1.0.2
+- [x] Crear Release Notes v1.0.2

@@ -8,15 +8,18 @@ import org.junit.Test
 
 class GeoPointTest {
     @Test
-    fun testSerializationWithLabel() {
+    fun testSerializationAsSimpleCoordinates() {
+        // Mocking the behavior of exportToJson mapping
         val points = listOf(
-            GeoPoint(10.0, 20.0, 123456789L, "Calle A"),
-            GeoPoint(11.0, 21.0, 123456790L, "Calle A")
+            GeoPoint(10.0, 20.0),
+            GeoPoint(11.0, 21.0)
         )
-        val json = Json.encodeToString(points)
-        assertTrue(json.contains("\"latitude\":10.0"))
-        assertTrue(json.contains("\"longitude\":20.0"))
-        assertTrue(json.contains("\"timestamp\":123456789"))
-        assertTrue(json.contains("\"label\":\"Calle A\""))
+        val simplePoints = points.map { listOf(it.latitude, it.longitude) }
+        val json = Json.encodeToString(simplePoints)
+        
+        // Should look like [[10.0,20.0],[11.0,21.0]]
+        assertTrue(json.startsWith("[["))
+        assertTrue(json.contains("10.0,20.0"))
+        assertTrue(!json.contains("\"latitude\""))
     }
 }

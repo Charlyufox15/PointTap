@@ -105,7 +105,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun exportToJson(): String {
-        return Json.encodeToString(_points.toList())
+        // Map points to a simple list of coordinates [lat, lon] to avoid keys in JSON
+        val simplePoints = _points.map { listOf(it.latitude, it.longitude) }
+        return Json.encodeToString(simplePoints)
     }
 
     fun savePointsToFile(context: Context, label: String? = null) {
