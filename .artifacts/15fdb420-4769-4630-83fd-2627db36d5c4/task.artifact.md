@@ -1,10 +1,10 @@
-# Tareas: Rediseño de Botones de Captura
+# Tareas: Limpieza de JSON y Nombres de Archivo Dinámicos
 
-- [x] Actualizar el ViewModel (Completado)
-- [x] Rediseñar Interfaz de Usuario
-    - [x] Mover botón de modo automático del TopBar al área flotante
-    - [x] Organizar botones en columna (Auto encima de Manual)
-    - [x] Mantener icono de reloj para el modo automático
+- [x] Actualizar modelo `GeoPoint.kt`
+    - [x] Excluir `timestamp` y `label` de la serialización JSON (usando `@Transient`)
+- [x] Modificar `MainViewModel.kt`
+    - [x] Actualizar `savePointsToFile` para incluir la etiqueta en el nombre del archivo
+    - [x] Simplificar `exportToJson` (ya no requiere procesar la etiqueta en los datos)
 - [x] Verificación
     - [x] Ejecutar build
-    - [x] Verificación manual
+    - [x] Verificación manual de la estructura JSON

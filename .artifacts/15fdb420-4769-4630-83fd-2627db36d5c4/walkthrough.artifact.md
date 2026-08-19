@@ -1,26 +1,29 @@
-# Walkthrough: Rediseño de Controles de Captura
+# Walkthrough: JSON Simplificado y Nombres Personalizados
 
-Se ha optimizado la ubicación de los controles para mejorar la ergonomía y facilitar el acceso a los dos modos de captura (Manual y Automático).
+Se ha optimizado la exportación de datos para cumplir con los requerimientos específicos de limpieza de archivos y organización.
 
 ## Cambios Realizados
 
-### Nueva Disposición Vertical (FABs)
-- **Consolidación de Controles:** El botón de modo automático se ha movido de la barra superior a la esquina inferior derecha, justo encima del botón de captura manual.
-- **Jerarquía Visual:**
-    - **Botón Superior (Reloj):** Activa el modo de captura automática cada 5 segundos. Tiene un color secundario para diferenciarse.
-    - **Botón Inferior (+):** Realiza la captura manual de un único punto. Es el botón principal en color sólido.
-- **Espaciado Ergonómico:** Ambos botones están alineados verticalmente con una separación adecuada para evitar toques accidentales.
+### JSON Ultra-Limpio
+- **Solo Coordenadas:** El archivo JSON ahora solo contiene los campos `latitude` y `longitude`.
+- **Exclusión de Metadatos:** Se eliminaron los campos `timestamp` y `label` del archivo final para reducir el peso y mantener solo la información esencial de georreferenciación.
+- **Persistencia en la UI:** Aunque no se guardan en el JSON, la fecha y la etiqueta siguen siendo visibles en la lista de la aplicación para referencia del usuario.
 
-## Cómo usar el nuevo diseño
+### Organización de Archivos
+- **Etiquetas en el Nombre:** Al guardar un archivo, el nombre de la "Calle/Camino/Carretera" que ingreses ahora forma parte del nombre del archivo físico.
+- **Formato de Archivo:** `[Nombre_de_Via]_[Timestamp].json` (ej: `Ruta_66_1722345678.json`).
+- **Compatibilidad:** Se reemplazan los espacios por guiones bajos en el nombre del archivo para asegurar la compatibilidad con todos los sistemas de archivos.
 
-1. **Modo Manual:** Pulsa el botón circular grande con el signo **"+"** en la esquina inferior.
-2. **Modo Automático:** Pulsa el botón circular que está justo encima con el icono del **reloj (Timer)**.
-    - Al hacerlo, ambos botones se ocultarán y aparecerán los controles de **Pausa** y **Stop** ya conocidos.
-3. **Regreso al Inicio:** Al pulsar **Stop (Rojo)**, volverás a ver la columna de dos botones (Auto y Manual).
+## Cómo usar los nuevos cambios
+
+1. **Captura:** Registra tus puntos normalmente.
+2. **Guardar:** Presiona el icono de **Guardar**.
+3. **Ingresar Vía:** Escribe el nombre (ej. "Camino Vecinal").
+4. **Verificar:** Al abrir la carpeta de descargas, verás el archivo con el nombre que ingresaste. Al abrir el archivo, verás que solo contiene las coordenadas.
 
 ## Verificación Técnica
-- **Diseño:** Se utilizó un componente `Column` dentro del `floatingActionButton` del Scaffold para agrupar los botones.
-- **Build:** Compilación exitosa.
+- **@Transient:** Se utilizó la anotación de serialización de Kotlin para excluir campos sin afectar la lógica interna de la app.
+- **Sanitización de Nombres:** Se añadió lógica para limpiar el nombre del archivo de caracteres no permitidos.
 
-> [!TIP]
-> Esta nueva ubicación permite controlar toda la operación de captura con un solo pulgar, sin tener que alcanzar la parte superior de la pantalla.
+> [!NOTE]
+> Al compartir el texto directamente (vía el botón de compartir), el JSON resultante también estará limpio de etiquetas y tiempos, enviando solo la lista de coordenadas.

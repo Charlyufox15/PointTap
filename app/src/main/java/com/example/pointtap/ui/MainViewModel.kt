@@ -104,13 +104,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun exportToJson(label: String? = null): String {
-        val pointsToExport = if (label != null) {
-            _points.map { it.copy(label = label) }
-        } else {
-            _points.toList()
-        }
-        return Json.encodeToString(pointsToExport)
+    fun exportToJson(): String {
+        return Json.encodeToString(_points.toList())
     }
 
     fun savePointsToFile(context: Context, label: String? = null) {
@@ -122,8 +117,13 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val success = withContext(Dispatchers.IO) {
                 try {
-                    val json = exportToJson(label)
-                    val filename = "puntos_${System.currentTimeMillis()}.json"
+                    val json = exportToJson()
+                    val timestamp = System.currentTimeMillis()
+                    val filename = if (label.isNullOrBlank()) {
+                        "puntos_$timestamp.json"
+                    } else {
+                        "${label.replace(" ", "_")}_$timestamp.json"
+                    }
                     
                     val contentValues = ContentValues().apply {
                         put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
