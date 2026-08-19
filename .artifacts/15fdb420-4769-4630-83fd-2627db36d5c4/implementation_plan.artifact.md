@@ -1,45 +1,47 @@
-# Plan de implementación: Captura Automática de Puntos
+# Plan de implementación: Exportación en formato GeoJSON
 
-Este plan detalla la adición de una función de captura automática que registra puntos GPS cada 5 segundos, con controles de pausa y parada.
+Este plan detalla la transición del formato de coordenadas simple al estándar internacional **GeoJSON**, optimizado para herramientas de mapeo y trazado de carreteras profesional.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> La captura automática se ejecutará en segundo plano (mientras la app esté abierta) cada 5 segundos.
-> La interfaz cambiará dinámicamente: el botón de captura única se ocultará para dar paso a los controles de **Pausa** y **Stop** durante el modo automático.
+> El archivo ahora seguirá el estándar **RFC 7946 (GeoJSON)**.
+> El orden de las coordenadas cambiará a `[longitud, latitud]` como lo exige la norma internacional GeoJSON.
+> La extensión del archivo cambiará de `.json` a `.geojson`.
 
 ## Proposed Changes
+
+### Capa de Datos
+
+#### [NEW] [GeoJsonModels.kt](file:///C:/Users/charl/AndroidStudioProjects/PointTap/app/src/main/java/com/example/pointtap/data/GeoJsonModels.kt)
+- Definir las clases serializables para `FeatureCollection`, `Feature` y `LineString`.
+
+---
 
 ### Lógica de Negocio y ViewModel
 
 #### [MODIFY] [MainViewModel.kt](file:///C:/Users/charl/AndroidStudioProjects/PointTap/app/src/main/java/com/example/pointtap/ui/MainViewModel.kt)
-- Añadir un estado `AutoCaptureState` (IDLE, RUNNING, PAUSED).
-- Implementar un `Job` de Coroutine para el temporizador de 5 segundos.
-- Funciones:
-    - `startAutoCapture()`: Inicia el bucle de captura.
-    - `pauseAutoCapture()`: Detiene el bucle temporalmente pero mantiene el estado.
-    - `resumeAutoCapture()`: Reanuda desde la pausa.
-    - `stopAutoCapture()`: Detiene todo y limpia el estado para volver al modo manual.
-
----
-
-### Interfaz de Usuario (Compose)
-
-#### [MODIFY] [PointTapApp.kt](file:///C:/Users/charl/AndroidStudioProjects/PointTap/app/src/main/java/com/example/pointtap/ui/PointTapApp.kt)
-- **Botón de Modo Automático:** Añadir un nuevo botón (posiblemente al lado del "+" o dentro de un menú) para activar el modo automático.
-- **Controles Dinámicos:**
-    - Si el modo automático está activo: Mostrar botones de **Pausa/Play** y **Stop**.
-    - Si no está activo: Mostrar el botón estándar de **"+"**.
-- **Feedback:** Mostrar un indicador visual (como un texto o icono parpadeante) que informe que el modo automático está trabajando.
+- **Refactorizar `exportToJson`:** Transformar la lista de puntos en un objeto GeoJSON de tipo `LineString`.
+- **Actualizar `savePointsToFile`:**
+    - Cambiar la extensión del archivo a `.geojson`.
+    - Ajustar el MIME type a `application/geo+json`.
 
 ---
 
 ## Verification Plan
 
 ### Manual Verification
-1. Abrir la app.
-2. Presionar el botón de "Captura Automática".
-3. Verificar que se agreguen puntos a la lista cada 5 segundos sin intervención.
-4. Presionar "Pausa" y verificar que se detenga la captura.
-5. Presionar "Play" y verificar que continúe.
-6. Presionar "Stop" y verificar que la interfaz regrese al modo de captura manual (+).
+1. Abrir la app y capturar puntos de una carretera.
+2. Presionar "Guardar" e ingresar el nombre de la vía.
+3. Verificar que el archivo generado termine en `.geojson`.
+4. Abrir el archivo y validar que tenga la estructura:
+   ```json
+   {
+     "type": "FeatureCollection",
+     "features": [{
+       "type": "Feature",
+       "geometry": { "type": "LineString", "coordinates": [[lon, lat], ...] }
+     }]
+   }
+   ```
+5. Importar en un visor de mapas (como geojson.io) para validar la ruta.

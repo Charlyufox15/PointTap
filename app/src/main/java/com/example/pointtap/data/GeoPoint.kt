@@ -7,8 +7,6 @@ import kotlinx.serialization.Transient
 data class GeoPoint(
     val latitude: Double,
     val longitude: Double,
-    @Transient
     val timestamp: Long = System.currentTimeMillis(),
-    @Transient
     val label: String? = null
 )

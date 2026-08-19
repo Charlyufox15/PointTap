@@ -1,12 +1,8 @@
-# Tareas: Limpieza de JSON y Nombres de Archivo Dinámicos
+# Tareas: Implementación de Formato GeoJSON
 
-- [x] Actualizar modelo `GeoPoint.kt`
-    - [x] Excluir `timestamp` y `label` de la serialización JSON (usando `@Transient`)
-- [x] Modificar `MainViewModel.kt`
-    - [x] Actualizar `savePointsToFile` para incluir la etiqueta en el nombre del archivo
-    - [x] Simplificar `exportToJson` (ya no requiere procesar la etiqueta en los datos)
-- [x] Verificación
-    - [x] Ejecutar build
-    - [x] Verificación manual de la estructura JSON
-- [x] Actualizar versión a 1.0.2
-- [x] Crear Release Notes v1.0.2
+- [x] Crear modelos de datos GeoJSON (`GeoJsonModels.kt`)
+- [x] Actualizar `MainViewModel.kt` para exportar en estándar GeoJSON
+- [x] Cambiar extensión de archivo a `.geojson`
+- [x] Incluir la etiqueta de la vía en las propiedades del GeoJSON
+- [x] Actualizar versión a 1.1.0
+- [x] Verificación técnica (Build)
