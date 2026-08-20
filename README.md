@@ -1,33 +1,33 @@
-# Descripción Detallada de PointTap
+# Descripción Detallada de PointTap (v1.1.0)
 
-**PointTap** es una herramienta especializada para ingenieros y topógrafos diseñada para simplificar la captura de coordenadas geográficas en proyectos de trazado de carreteras. La aplicación permite registrar puntos precisos de latitud y longitud, visualizarlos en tiempo real y exportarlos en formatos estructurados para su posterior procesamiento.
+**PointTap** es una herramienta profesional de georreferenciación diseñada específicamente para ingenieros y topógrafos involucrados en el trazado de carreteras y caminos. La aplicación optimiza la captura de coordenadas geográficas, permitiendo tanto el registro manual como automatizado de puntos con alta precisión GPS.
 
 ---
 
 ## Componentes y Funcionalidades Principales
 
-### 1. Gestión de Ubicación (GPS de Alta Precisión)
-La app utiliza el proveedor de ubicación fusionado (`FusedLocationProviderClient`) de Google Play Services para garantizar la máxima precisión disponible en el dispositivo.
-- **Captura Instantánea:** Al presionar el botón "+", la app solicita una actualización de ubicación única con prioridad de alta precisión.
-- **Datos Capturados:** Cada punto incluye Latitud, Longitud y una marca de tiempo exacta (Timestamp).
+### 1. Modos de Captura Avanzados
+La app ofrece flexibilidad total para el trabajo de campo:
+- **Captura Manual:** Permite registrar puntos individuales con precisión quirúrgica mediante el botón **"+"**. Ideal para marcar hitos o puntos de control específicos.
+- **Captura Automática (Timer):** Un motor inteligente que registra la ubicación cada **5 segundos** sin intervención del usuario. Incluye controles de **Pausa** y **Stop**, permitiendo gestionar paradas técnicas durante el trayecto.
+- **GPS de Alta Precisión:** Utiliza `FusedLocationProviderClient` para garantizar las coordenadas más exactas que el hardware del dispositivo permita.
 
-### 2. Gestión de Permisos Inteligente
-Para garantizar un funcionamiento sin errores, la app implementa un sistema de validación de permisos al inicio:
-- **Ubicación:** Requiere permisos de ubicación precisa (`ACCESS_FINE_LOCATION`) para obtener las coordenadas.
-- **Almacenamiento:** Solicita permisos de lectura y escritura para gestionar los archivos JSON en la memoria del dispositivo.
-- **Bloqueo Preventivo:** La interfaz principal no se activa hasta que el usuario concede los permisos necesarios, evitando cierres inesperados.
+### 2. Estándar de Datos GeoJSON
+A partir de la versión 1.1.0, PointTap adopta el estándar internacional **GeoJSON (RFC 7946)**:
+- **Formato Profesional:** Los datos se exportan como una `FeatureCollection` con una geometría de tipo `LineString`.
+- **Compatibilidad Directa:** Los archivos generados son compatibles de forma nativa con software de ingeniería y GIS como QGIS, ArcGIS y Google Earth.
+- **Orden Internacional:** Las coordenadas se guardan en el formato estándar `[Longitud, Latitud]`.
 
-### 3. Almacenamiento y Exportación
-La aplicación ofrece múltiples formas de extraer y guardar los datos:
-- **Guardado Local en Carpeta:** Genera archivos con extensión `.json` dentro de la carpeta pública `Download/PointTap`. Cada archivo es nombrado automáticamente con la fecha y hora de creación para evitar duplicados.
-- **Formato Estándar:** El archivo generado utiliza el estándar JSON, lo que lo hace compatible con herramientas de escritorio, software de GIS o sistemas de trazado de carreteras.
-- **Compartir Directo:** Permite enviar el listado de puntos actual como texto plano/JSON a través de otras aplicaciones (WhatsApp, Email, Telegram, etc.) sin necesidad de guardarlo primero.
+### 3. Organización y Almacenamiento
+- **Nombres de Archivo Personalizados:** Al guardar, se solicita una etiqueta ("Calle/Camino/Carretera") que se integra automáticamente en el nombre del archivo físico (ej: `Ruta_66_1724089200.geojson`).
+- **Ubicación Centralizada:** Todos los trabajos se almacenan en la carpeta pública `Download/PointTap`, facilitando su acceso desde cualquier gestor de archivos.
+- **Historial Integrado:** Un panel lateral (Drawer) permite visualizar todos los archivos guardados previamente y compartirlos instantáneamente sin salir de la aplicación.
 
-### 4. Interfaz de Usuario (UI)
-Diseñada bajo los principios de **Material Design 3**, la interfaz es limpia y funcional:
-- **Lista de Puntos:** Presenta tarjetas informativas para cada punto capturado, facilitando la revisión rápida en campo.
-- **Feedback Visual:** Incluye indicadores de carga (progress indicators) mientras el GPS intenta fijar la posición, informando al usuario que la captura está en progreso.
-- **Acceso Directo a Archivos:** Un botón dedicado abre el gestor de archivos del sistema directamente en la carpeta de descargas, permitiendo al usuario gestionar sus mediciones sin salir de la experiencia del flujo de trabajo.
+### 4. Interfaz de Usuario (UI) y Experiencia
+Diseñada con **Material Design 3**, la interfaz prioriza la ergonomía en campo:
+- **Control con una Sola Mano:** Los botones de captura están agrupados verticalmente en la parte inferior derecha para facilitar el uso mientras se camina o se conduce a baja velocidad.
+- **Gestión de Permisos Robusta:** Un sistema de validación inicial asegura que la app tenga acceso a la Ubicación y al Almacenamiento antes de comenzar, evitando fallos accidentales.
+- **Feedback en Tiempo Real:** Barra de estado dinámica que indica si la captura automática está activa o pausada, junto con una lista visual de los puntos capturados.
 
 ---
 
@@ -35,15 +35,15 @@ Diseñada bajo los principios de **Material Design 3**, la interfaz es limpia y 
 
 | Función | Descripción Técnica |
 | :--- | :--- |
-| **Marcar Punto** | Lógica asíncrona (Coroutines) que consulta el sensor GPS y añade un objeto `GeoPoint` a la lista reactiva. |
-| **Guardar (JSON)** | Serializa la lista de puntos y utiliza `MediaStore` para escribir físicamente el archivo en el almacenamiento externo. |
-| **Abrir Carpeta** | Ejecuta un `Intent` con múltiples niveles de respaldo para navegar por el sistema de archivos de Android hasta la ruta de `Download/PointTap`. |
-| **Exportar/Compartir** | Convierte la sesión actual en una cadena de texto formateada y lanza el selector de aplicaciones compartidas de Android. |
+| **Captura Auto** | Ciclo asíncrono basado en Coroutines que consulta el sensor cada 5000ms y actualiza el estado reactivo de la UI. |
+| **Guardar (GeoJSON)** | Transforma la lista de puntos en una estructura `FeatureCollection` y la serializa usando `kotlinx-serialization`. |
+| **Panel Lateral** | Consulta dinámica de `MediaStore` para listar archivos `.geojson` con filtrado por ruta relativa. |
+| **Compartir Historial** | Utiliza `Intent.ACTION_SEND` con `FLAG_GRANT_READ_URI_PERMISSION` para compartir archivos de forma segura. |
 
 ---
 
 > [!TIP]
-> **Recomendación de Uso:** Para obtener resultados óptimos en el trazado de carreteras, se recomienda esperar 2-3 segundos en la posición antes de presionar el botón de captura para permitir que el GPS se estabilice.
+> **Optimización de Trazado:** El modo automático está diseñado para recorridos en vehículos a baja velocidad o caminatas, asegurando una densidad de puntos ideal para el diseño de curvas y pendientes en carreteras.
 
 > [!IMPORTANT]
-> **Privacidad:** Todos los datos se almacenan localmente en el dispositivo. La app no envía coordenadas a servidores externos a menos que el usuario decida compartirlas manualmente.
+> **Privacidad y Seguridad:** PointTap no requiere conexión a internet para funcionar ni envía datos a la nube. Toda tu información de ingeniería permanece privada en tu dispositivo hasta que decidas compartirla.
