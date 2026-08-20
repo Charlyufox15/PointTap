@@ -1,26 +1,34 @@
 # Release Notes - PointTap v1.0.3 🎯
 
-Esta versión introduce un cambio estructural en los archivos JSON para garantizar la máxima compatibilidad con sistemas de importación de coordenadas puras.
+Esta versión establece el estándar de **simplicidad y compatibilidad técnica**, optimizando el formato de los datos para herramientas de ingeniería que requieren coordenadas numéricas puras.
 
 ## 🚀 Lo nuevo en v1.0.3
 
 ### 🔢 Formato de Coordenadas Puras (Arrays)
-- **Cero Datos Alfanuméricos:** Se han eliminado las llaves `{}` y las etiquetas de texto (`"latitude"`, `"longitude"`) del archivo exportado.
-- **Estructura de Matriz:** Los puntos ahora se guardan en un formato de arreglo de arreglos `[[lat, lon], [lat, lon]]`.
-- **Importación Directa:** Este formato es el estándar para muchos motores de cálculo y herramientas de trazado que requieren solo los valores numéricos sin metadatos.
+Hemos simplificado la estructura interna del archivo para ofrecer la máxima compatibilidad:
+- **Cero Texto Innecesario:** Se han eliminado las llaves `{}` y las etiquetas de campo (`"latitude"`, `"longitude"`).
+- **Estructura de Matriz:** Los puntos ahora se guardan como una lista de arreglos numéricos: `[[lat, lon], [lat, lon]]`.
+- **Extensión Estándar:** Los archivos utilizan la extensión `.json` para ser reconocidos por cualquier editor de texto o software de cálculo.
 
-## 🛠️ Ajustes Realizados
-- **Transformación de Datos:** El motor de exportación ahora procesa los puntos internamente para remover los nombres de los campos.
-- **Versión Actualizada:** Proyecto actualizado a la versión **1.0.3**.
+### ⏲️ Potencia en el Campo (Mantenido)
+Se mantienen todas las funciones avanzadas introducidas en versiones anteriores:
+- **Captura Automática:** Registro de ubicación cada 5 segundos con controles de pausa.
+- **Etiquetado Inteligente:** El nombre de la vía se utiliza para nombrar el archivo físico automáticamente.
+- **Historial Completo:** Panel lateral para revisar y compartir mediciones pasadas.
 
-## 📂 Ejemplo del Nuevo Archivo
+## 🛠️ Detalles de la Versión
+- **Formato de Salida:** JSON (Matriz de números).
+- **Ubicación:** `Download/PointTap`.
+- **Versión de Compilación:** 4.
+
+## 📂 Ejemplo del Formato de Datos
 ```json
 [
-  [10.123456, -20.654321],
-  [10.123500, -20.654400],
-  [10.123600, -20.654500]
+  [14.123456, -90.654321],
+  [14.123500, -90.654400],
+  [14.123600, -90.654500]
 ]
 ```
 
 ---
-*PointTap: Datos limpios para una ingeniería más rápida.*
+*PointTap: La herramienta más rápida y limpia para el trazado de rutas.*
