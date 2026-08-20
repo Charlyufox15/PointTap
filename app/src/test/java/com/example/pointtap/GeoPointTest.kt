@@ -9,7 +9,6 @@ import org.junit.Test
 class GeoPointTest {
     @Test
     fun testSerializationAsSimpleCoordinates() {
-        // Mocking the behavior of exportToJson mapping
         val points = listOf(
             GeoPoint(10.0, 20.0),
             GeoPoint(11.0, 21.0)
@@ -20,6 +19,6 @@ class GeoPointTest {
         // Should look like [[10.0,20.0],[11.0,21.0]]
         assertTrue(json.startsWith("[["))
         assertTrue(json.contains("10.0,20.0"))
-        assertTrue(!json.contains("\"latitude\""))
+        assertTrue(!json.contains("\"type\""))
     }
 }

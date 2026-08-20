@@ -1,24 +1,24 @@
-# Walkthrough: Formato de Coordenadas Puro (Array)
+# Walkthrough: Reversión a Versión 1.0.3 (Formato Simple)
 
-Se ha realizado un ajuste crítico en la estructura del archivo JSON para eliminar cualquier dato alfanumérico (llaves y etiquetas) y entregar únicamente un arreglo de coordenadas puras.
+Se ha revertido la aplicación al estado funcional de la versión 1.0.3, volviendo al formato de coordenadas numéricas simplificadas.
 
 ## Cambios Realizados
 
-### Estructura JSON de Solo Coordenadas
-- **Eliminación de Objetos `{}`:** Se ha eliminado la estructura de objetos con claves `"latitude"` y `"longitude"`.
-- **Formato de Arreglo `[]`:** Ahora cada punto se representa como un pequeño arreglo `[latitud, longitud]`.
-- **Resultado Final:** El archivo completo es ahora una matriz de números, eliminando texto innecesario y facilitando la importación en sistemas que esperan coordenadas brutas.
+### Reversión de Estructura de Datos
+- **Formato JSON Simple:** Se eliminó la estructura GeoJSON. Los archivos vuelven a ser una lista de arreglos numéricos: `[[lat, lon], [lat, lon]]`.
+- **Extensión de Archivo:** Se cambió de nuevo la extensión de `.geojson` a `.json`.
+- **Tipo de Contenido:** Se restableció el MIME type a `application/json`.
 
-## Ejemplo del Nuevo Formato
-Antes:
-`[{"latitude": 10.1, "longitude": -20.1}, ...]`
+### Configuración del Proyecto
+- **Versión:** Se ajustó el `versionCode` a 4 y el `versionName` a `"1.0.3"`.
+- **Limpieza:** Se eliminaron los modelos de datos GeoJSON que ya no son necesarios.
 
-Ahora (v1.0.3):
-`[[10.1, -20.1], [10.2, -20.2], ...]`
+## Ejemplo del Formato Restablecido (1.0.3)
+`[[10.1234, -20.5678], [10.1235, -20.5679]]`
 
 ## Verificación Técnica
-- **Mapeo Dinámico:** El `MainViewModel` ahora transforma los objetos `GeoPoint` en listas simples de números antes de la serialización.
-- **Limpieza Total:** Se eliminaron todas las referencias a claves de texto dentro del flujo de exportación.
+- **Build:** La aplicación compila correctamente sin las dependencias de GeoJSON.
+- **Pruebas:** Se actualizaron las pruebas unitarias para validar el formato de matriz de números.
 
-> [!IMPORTANT]
-> Este cambio asegura que el archivo sea interpretado directamente como una lista de coordenadas matemáticas, sin datos alfanuméricos que puedan causar errores en herramientas de ingeniería legacy.
+> [!NOTE]
+> Aunque los archivos ahora son más simples, la funcionalidad de etiquetado en el nombre del archivo y la captura automática se mantienen activas.

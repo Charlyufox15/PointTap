@@ -13,7 +13,8 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.pointtap.data.*
+import com.example.pointtap.data.GeoPoint
+import com.example.pointtap.data.SavedFile
 import com.example.pointtap.location.LocationService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -103,20 +104,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun exportToJson(label: String? = null): String {
-        // GeoJSON standard: [longitude, latitude]
-        val coordinates = _points.map { listOf(it.longitude, it.latitude) }
-        
-        val feature = GeoJsonFeature(
-            properties = if (label != null) mapOf("name" to label) else emptyMap(),
-            geometry = GeoJsonGeometry(coordinates = coordinates)
-        )
-        
-        val featureCollection = GeoJsonFeatureCollection(
-            features = listOf(feature)
-        )
-        
-        return Json.encodeToString(featureCollection)
+    fun exportToJson(): String {
+        // Map points to a simple list of coordinates [lat, lon]
+        val simplePoints = _points.map { listOf(it.latitude, it.longitude) }
+        return Json.encodeToString(simplePoints)
     }
 
     fun savePointsToFile(context: Context, label: String? = null) {
@@ -128,17 +119,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             val success = withContext(Dispatchers.IO) {
                 try {
-                    val json = exportToJson(label)
+                    val json = exportToJson()
                     val timestamp = System.currentTimeMillis()
                     val filename = if (label.isNullOrBlank()) {
-                        "puntos_$timestamp.geojson"
+                        "puntos_$timestamp.json"
                     } else {
-                        "${label.replace(" ", "_")}_$timestamp.geojson"
+                        "${label.replace(" ", "_")}_$timestamp.json"
                     }
                     
                     val contentValues = ContentValues().apply {
                         put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                        put(MediaStore.MediaColumns.MIME_TYPE, "application/geo+json")
+                        put(MediaStore.MediaColumns.MIME_TYPE, "application/json")
                         put(MediaStore.MediaColumns.RELATIVE_PATH, Environment.DIRECTORY_DOWNLOADS + "/PointTap")
                     }
 
